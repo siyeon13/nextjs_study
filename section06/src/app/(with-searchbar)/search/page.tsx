@@ -3,6 +3,10 @@ import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
 import { delay } from "@/util/delay";
 import { Suspense } from "react";
+import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+
+import "react-loading-skeleton/dist/skeleton.css";
 
 // export const dynamic = "force-static";
 // 무조건 static 페이지로 작동되도록 알아서 다 변경이 된다. 쿼리스트링은 undefinde
@@ -35,7 +39,16 @@ export default function Page({
 }) {
   // const { q } = await searchParams;
   return (
-    <Suspense key={searchParams.q || ""} fallback={<div>로딩중...</div>}>
+    <Suspense
+      key={searchParams.q || ""}
+      fallback={
+        <SkeletonTheme baseColor="#202020" highlightColor="#444">
+          <p>
+            <Skeleton count={3} />
+          </p>
+        </SkeletonTheme>
+      }
+    >
       <SearchResult q={searchParams.q || ""} />
     </Suspense>
   );
