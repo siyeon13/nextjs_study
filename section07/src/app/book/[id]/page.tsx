@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-import { createReviewAction } from "@/actions/create-review-action";
 import { ReviewData } from "@/types";
 import ReviewItem from "@/components/review-item";
+import ReviewEditor from "@/components/review-editor";
 
 /* const mockData = {
   id: 1,
@@ -28,7 +28,8 @@ export function generateStaticParams() {
 
 async function BookDetail({ bookId }: { bookId: string }) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`,
+    { cache: "force-cache" }
   );
 
   if (!response.ok) {
@@ -64,23 +65,10 @@ async function BookDetail({ bookId }: { bookId: string }) {
   );
 }
 
-// 서버 액션을 만들면 자동으로 api가 하나 생성이 됨, 폼태그에서 실행할때 api가 자동으로 실행
-function ReviewEditor({ bookId }: { bookId: string }) {
-  return (
-    <section>
-      <form action={createReviewAction}>
-        <input name="bookId" value={bookId} hidden readOnly />
-        <input required name="content" placeholder="리뷰 내용" />
-        <input required name="author" placeholder="작성자" />
-        <button type="submit">작성하기</button>
-      </form>
-    </section>
-  );
-}
-
 async function ReviewList({ bookId }: { bookId: string }) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/book/${bookId}`,
+    { next: { tags: [`review-${bookId}`] } }
   );
 
   if (!response.ok) {
