@@ -1,9 +1,7 @@
 import books from "@/mock/books.json";
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
-import { delay } from "@/util/delay";
 import { Suspense } from "react";
-import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import "react-loading-skeleton/dist/skeleton.css";
@@ -13,7 +11,6 @@ import { Metadata } from "next";
 // 무조건 static 페이지로 작동되도록 알아서 다 변경이 된다. 쿼리스트링은 undefinde
 
 async function SearchResult({ q }: { q: string }) {
-  await delay(1700);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`,
     { cache: "force-cache" }

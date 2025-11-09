@@ -21,9 +21,20 @@ import Image from "next/image";
 //export const dynamicParams = false;
 // dynamicParams 를 false로 설정하면 generateStaticParams에 지정한 id 경로에 해당되지 않는 페이지는 없는 페이지로 간주된다. -> 404페이지로 리다이렉션
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+  );
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const books: BookData[] = await response.json();
+
+  return books.map((book) => ({ id: book.id.toString() })); // 모든 도서의 데이터를 정적으로 생성
+
   // 정적인 파라미터를 생성하는 함수
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+  // return [{ id: "1" }, { id: "2" }, { id: "3" }];
   // 파라미터를 문자열로만 작성해야함, 페이지컴포넌트 내부에 데이터캐싱이 설정되지 않은 이러한 데이터 패칭이 존재하게 될지라도 무조건 스태틱 페이지로서 강제로 설정됨
 }
 
