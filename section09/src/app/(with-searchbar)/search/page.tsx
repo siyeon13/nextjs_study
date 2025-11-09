@@ -58,15 +58,15 @@ export async function generateMetadata({
   };
 }
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
-  // const { q } = await searchParams;
+  const { q } = await searchParams;
   return (
     <Suspense
-      key={searchParams.q || ""}
+      key={q || ""}
       fallback={
         <SkeletonTheme baseColor="#202020" highlightColor="#444">
           <p>
@@ -75,7 +75,7 @@ export default function Page({
         </SkeletonTheme>
       }
     >
-      <SearchResult q={searchParams.q || ""} />
+      <SearchResult q={q || ""} />
     </Suspense>
   );
 }
